@@ -6,7 +6,7 @@ app = FastAPI()
 
 @app.get('/')
 def index():
-    return {'text': 'hello'}
+    return {'test': 'hello'}
 
 
 if __name__ == '__main__':
