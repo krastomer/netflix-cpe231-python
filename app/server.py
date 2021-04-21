@@ -1,3 +1,4 @@
+from app.backend.main import hello_db
 import uvicorn
 from fastapi import FastAPI
 
@@ -5,7 +6,7 @@ app = FastAPI()
 
 
 @app.get('/')
-def index():
+async def index():
     return {'test': 'hello'}
 
 
