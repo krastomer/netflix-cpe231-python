@@ -1,6 +1,6 @@
 from app.models.user import UserWithHash
 from app.models.token import TokenData
-from fastapi import Header, HTTPException, Depends, status
+from fastapi import HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 
