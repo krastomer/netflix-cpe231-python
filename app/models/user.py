@@ -10,13 +10,3 @@ class User(BaseModel):
 
 class UserWithHash(User):
     password: str
-
-
-class UserRegister(BaseModel):
-    email: str
-    password: str
-    phone_number: str
-    card_firstname: str
-    card_lastname: str
-    expire_date: str
-    ccv: str
