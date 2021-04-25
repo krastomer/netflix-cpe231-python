@@ -1,6 +1,6 @@
 from app.models.user import UserWithHash
 from app.models.token import TokenData
-from fastapi import HTTPException, Depends, status
+from fastapi import Header, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 
@@ -27,6 +27,7 @@ fake_db = {
     },
 }
 
+<<<<<<< HEAD
 # firebase config
 firebase_config = {
     'apiKey': "AIzaSyAz-5UqRKZo3VYCB5VH4xQWNzXWESfCuI4",
@@ -38,6 +39,8 @@ firebase_config = {
     'databaseURL': ''
 }
 
+=======
+>>>>>>> parent of 504d710 (fixed jose version)
 credentials_expection = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail='Could not validate credentials',
@@ -47,12 +50,6 @@ credentials_expection = HTTPException(
 incorrect_expection = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail='Incorrect username or password',
-    headers={'WWW-Authenticate': 'Bearer'}
-)
-
-notfound_exception = HTTPException(
-    status_code=status.HTTP_404_NOT_FOUND,
-    detail='Not found',
     headers={'WWW-Authenticate': 'Bearer'}
 )
 
