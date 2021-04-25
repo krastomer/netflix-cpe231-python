@@ -1,7 +1,6 @@
 from app.models.token import Token
 from typing import Optional
-from app.models.user import UserWithHash
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from datetime import timedelta, datetime
