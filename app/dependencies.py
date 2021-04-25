@@ -35,7 +35,6 @@ firebase_config = {
     'storageBucket': "netflix-cpe231.appspot.com",
     'messagingSenderId': "202995106255",
     'appId': "1:202995106255:web:229af33543bfa493e412ba",
-    'serviceAccount': "key/firebaseKey.json",
     'databaseURL': ''
 }
 
