@@ -1,8 +1,9 @@
 from app.models.user import UserWithHash
 from app.models.token import TokenData
-from fastapi import Header, HTTPException, Depends, status
+from fastapi import HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
+import pyrebase
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
@@ -27,8 +28,6 @@ fake_db = {
     },
 }
 
-<<<<<<< HEAD
-# firebase config
 firebase_config = {
     'apiKey': "AIzaSyAz-5UqRKZo3VYCB5VH4xQWNzXWESfCuI4",
     'authDomain': "netflix-cpe231.firebaseapp.com",
@@ -36,11 +35,10 @@ firebase_config = {
     'storageBucket': "netflix-cpe231.appspot.com",
     'messagingSenderId': "202995106255",
     'appId': "1:202995106255:web:229af33543bfa493e412ba",
-    'databaseURL': ''
+    'databaseURL': '',
+    'serviceAccount': 'key/firebaseKey.json'
 }
 
-=======
->>>>>>> parent of 504d710 (fixed jose version)
 credentials_expection = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail='Could not validate credentials',
@@ -51,6 +49,11 @@ incorrect_expection = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail='Incorrect username or password',
     headers={'WWW-Authenticate': 'Bearer'}
+)
+
+notfound_exception = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+    detail='Not found'
 )
 
 
@@ -73,3 +76,9 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     if user is None:
         raise credentials_expection
     return user
+
+
+async def get_storage():
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    return storage
