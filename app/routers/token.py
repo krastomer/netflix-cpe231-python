@@ -1,21 +1,16 @@
 from app.models.token import Token
 from typing import Optional
-from app.models.user import UserWithHash
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from passlib.context import CryptContext
 from datetime import timedelta, datetime
 from jose import jwt
-from ..dependencies import TOKEN_EXPIRES, SECRET_KEY, ALGORITHM, get_user, incorrect_expection, fake_db
+from ..dependencies import *
 
 router = APIRouter(
     prefix='/token',
     tags=['token'],
     responses={404: {'description': 'Not found'}}
 )
-
-
-pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 
 def verify_password(plain_password, hashed_password):
