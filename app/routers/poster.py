@@ -1,5 +1,5 @@
 from app.models.user import User
-from ..dependencies import get_current_user, get_storage, notfound_exception
+from ..dependencies import get_current_user, get_storage, notfound_exception, badrequest_exception
 from fastapi import APIRouter, Depends
 
 router = APIRouter(
@@ -9,8 +9,10 @@ router = APIRouter(
 )
 
 
-@router.get('/{movie}')
-async def get_poster_all(movie: str, user: User = Depends(get_current_user)):
+@router.get('/')
+async def get_poster_all(movie: str = None, user: User = Depends(get_current_user)):
+    if movie == None:
+        raise badrequest_exception
     storage = await get_storage()
     list_url = []
     count = 0
