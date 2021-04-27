@@ -18,10 +18,13 @@ def create_user(db: Session, user: schemas.User):
         db.add(content)
         db.commit()
         db.refresh(content)
-        return content
+        return True
     except:
-        return None
+        return False
 
 
 def get_user_by_email(db: Session, email: str):
-    return db.query(models.User).filter(models.User.email == email).first()
+    user = db.query(models.User).filter(models.User.email == email).first()
+    if user:
+        return schemas.UserHash(email=user.email, password=user.password)
+    return None

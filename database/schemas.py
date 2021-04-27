@@ -6,6 +6,10 @@ class UserBase(BaseModel):
     email: str
 
 
+class UserHash(UserBase):
+    password: str
+
+
 class User(UserBase):
     password: str
     phone_number: Optional[str]

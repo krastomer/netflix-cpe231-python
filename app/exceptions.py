@@ -17,7 +17,12 @@ notfound_exception = HTTPException(
     detail='Not found'
 )
 
-badrequest_exception = HTTPException(
-    status_code=status.HTTP_400_BAD_REQUEST,
-    detail='Incorrent parameter'
+badparameter_exception = HTTPException(
+    status_code=status.HTTP_406_NOT_ACCEPTABLE,
+    detail='Incorrect parameter'
+)
+
+emailvalid_exception = HTTPException(
+    status_code=status.HTTP_406_NOT_ACCEPTABLE,
+    detail='Email has registered'
 )
