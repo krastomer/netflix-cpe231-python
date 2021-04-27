@@ -14,5 +14,5 @@ class User(UserBase):
     card_number: Optional[str]
     exp_date: Optional[str]
     security_code: Optional[str]
-    next_billing: Optional[int]
+    next_billing: Optional[str]
     plan_id: Optional[int]
