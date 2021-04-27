@@ -21,3 +21,7 @@ def create_user(db: Session, user: schemas.User):
         return content
     except:
         return None
+
+
+def get_user_by_email(db: Session, email: str):
+    return db.query(models.User).filter(models.User.email == email).first()
