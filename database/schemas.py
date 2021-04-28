@@ -20,3 +20,7 @@ class User(UserBase):
     security_code: Optional[str]
     next_billing: Optional[str]
     plan_id: Optional[int]
+
+
+class UserId(UserBase):
+    id_account: int

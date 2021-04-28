@@ -1,7 +1,7 @@
 from database import models
 from database.database import engine
 from fastapi import FastAPI
-from .routers import token, register
+from .routers import token, register, poster
 
 app = FastAPI(
     title='Netflix CPE231 API',
@@ -13,6 +13,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app.include_router(token.router)
 app.include_router(register.router)
+app.include_router(poster.router)
 
 
 @app.get('/')

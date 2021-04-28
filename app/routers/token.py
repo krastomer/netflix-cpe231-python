@@ -1,5 +1,5 @@
 from sqlalchemy.orm.session import Session
-from database.crud import get_user_by_email
+from database.crud import get_user_password
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Optional
@@ -21,7 +21,7 @@ def verify_password(plain_password, hashed_password):
 
 
 def authenticate_user(db, email: str, password: str):
-    user = get_user_by_email(db, email)
+    user = get_user_password(db, email)
     if not user:
         return False
     if not verify_password(password, user.password):

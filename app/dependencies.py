@@ -1,4 +1,4 @@
-from database.crud import get_user_by_email
+from database.crud import get_user_from_token
 from fastapi import Depends
 from sqlalchemy.orm import Session
 from database.database import SessionLocal
@@ -27,7 +27,7 @@ async def get_current_user(token: str = Depends(config.oauth2_scheme), db: Sessi
             raise exceptions.credentials_expection
     except JWTError:
         raise exceptions.credentials_expection
-    user = get_user_by_email(db, email=email)
+    user = get_user_from_token(db, email=email)
     if user is None:
         raise exceptions.credentials_expection
     return user
