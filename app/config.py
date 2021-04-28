@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
 TOKEN_EXPIRES = 30
-SECRET_KEY = '09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7'
+SECRET_KEY = 'de8b533781c224224ea9fe781e3c77035fa4769e077e21b137ec723d45819f1b'
 ALGORITHM = 'HS256'
 
 firebase_config = {
