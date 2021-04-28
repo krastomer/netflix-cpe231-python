@@ -1,29 +1,27 @@
-from app.models.token import Token
-from typing import Optional
-from app.models.user import UserWithHash
-from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm.session import Session
+from database.crud import get_user_by_email
+from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from passlib.context import CryptContext
+from typing import Optional
 from datetime import timedelta, datetime
 from jose import jwt
-from ..dependencies import TOKEN_EXPIRES, SECRET_KEY, ALGORITHM, get_user, incorrect_expection, fake_db
+from app.models.token import Token
+from app.dependencies import get_db, pwd_context
+from .. import exceptions, config
 
 router = APIRouter(
     prefix='/token',
-    tags=['token'],
+    tags=['Token'],
     responses={404: {'description': 'Not found'}}
 )
-
-
-pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def authenticate_user(db, username: str, password: str):
-    user = get_user(db, username)
+def authenticate_user(db, email: str, password: str):
+    user = get_user_by_email(db, email)
     if not user:
         return False
     if not verify_password(password, user.password):
@@ -35,16 +33,17 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = timedel
     to_encode = data.copy()
     expire = datetime.utcnow() + expires_delta
     to_encode.update({'exp': expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(
+        to_encode, config.SECRET_KEY, algorithm=config.ALGORITHM)
     return encoded_jwt
 
 
 @router.post('/', response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(fake_db, form_data.username, form_data.password)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
-        raise incorrect_expection
-    access_token_expires = timedelta(minutes=TOKEN_EXPIRES)
+        raise exceptions.incorrect_expection
+    access_token_expires = timedelta(minutes=config.TOKEN_EXPIRES)
     access_token = create_access_token(
         data={'sub': user.email},
         expires_delta=access_token_expires
