@@ -18,7 +18,8 @@ class User(Base):
     security_code = Column(String)
     next_billing = Column(String)
     plan_id = Column(String, ForeignKey('plan.plan_id'), nullable=False)
-    children = relationship("Billing", "Viewer")
+    children = relationship("Billing")
+    children2 = relationship("Viewer")
 
 
 class Billing(Base):
@@ -42,8 +43,8 @@ class Casting(Base):
                         nullable=False, primary_key=True)
     id_movie = Column(Integer, ForeignKey(
         'movie_and_series.id_movie'), nullable=False, primary_key=True)
-    children = relationship("Movie_and_series", "Cast")
-
+    children = relationship("Movie_and_series")
+    children2 =relationship("Cast")
 
 class Director(Base):
     __tablename__ = 'director'
@@ -68,7 +69,9 @@ class Episode(Base):
     no_episode = Column(Integer, nullable=False)
     n_views = Column(Integer, nullable=False)
     description = Column(String)
-    children = relationship("Episode_tag", "Soundtrack", "Subtitle")
+    children = relationship("Episode_tag")
+    children2=relationship("Soundtrack")
+    children3 = relationship("Subtitle")
 
 
 class Episode_tag(Base):
@@ -111,8 +114,14 @@ class Movie_and_series(Base):
     name = Column(String, nullable=False)
     rate = Column(Integer, nullable=False)
     is_series = Column(Integer, nullable=False)
-    children = relationship("History", "My_list", "Casting", "Genres_movie",
-                            "Director_movie", "Season", "Staff_history_movie")
+    children = relationship("History")
+    children2= relationship("My_list")
+    children3=relationship( "Casting")
+    children4=relationship("Genres_movie")
+    children5=relationship("Director_movie")
+    children6=relationship("Season")
+    children7=relationship("Staff_history_movie")
+    
 
 
 class My_list(Base):
@@ -166,8 +175,9 @@ class Staff(Base):
     email = Column(String, nullable=False)
     password = Column(String, nullable=False)
     salary = Column(Integer, nullable=False)
-    children = relationship(
-        "Staff_history_movie", "Staff_history_soundtrack", "Staff_history_subtitle")
+    children = relationship("Staff_history_movie")
+    children2 = relationship("Staff_history_soundtrack")
+    children3 = relationship("Staff_history_subtitle")
 
 
 class Staff_history_movie(Base):
