@@ -1,8 +1,7 @@
-from database.crud import create_user
-from database import models, schemas
+from database import models
 from database.database import engine
 from fastapi import FastAPI
-from .routers import token, register, poster
+from .routers import token, register, poster, payment
 
 app = FastAPI(
     title='Netflix CPE231 API',
@@ -15,6 +14,7 @@ models.Base.metadata.create_all(bind=engine)
 app.include_router(token.router)
 app.include_router(register.router)
 app.include_router(poster.router)
+app.include_router(payment.router)
 
 
 @app.get('/')
