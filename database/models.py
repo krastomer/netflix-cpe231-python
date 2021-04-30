@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Numeric, ForeignKey, Date
+from sqlalchemy import Column, Integer, String, Numeric, ForeignKey, Date, DateTime, Boolean, Time
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -8,7 +8,7 @@ class User(Base):
 
     id_account = Column(Integer, primary_key=True,
                         nullable=False, autoincrement=True)
-    email = Column(String, unique=True)
+    email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     phone_number = Column(String, unique=True)
     firstname = Column(String)
@@ -17,7 +17,7 @@ class User(Base):
     exp_date = Column(String)
     security_code = Column(String)
     next_billing = Column(Date)
-    plan_id = Column(Integer, ForeignKey('plan.plan_id'), nullable=False)
+    plan_id = Column(Integer, ForeignKey('plan.plan_id'))
     children = relationship("Billing")
     children2 = relationship("Viewer")
 
@@ -25,7 +25,7 @@ class User(Base):
 class Billing(Base):
     __tablename__ = 'billing'
 
-    billing_date = Column(String, nullable=False)
+    billing_date = Column(DateTime, nullable=False)
     billing_id = Column(String, primary_key=True, nullable=False)
     id_account = Column(Integer, ForeignKey('user.id_account'), nullable=False)
 
@@ -103,8 +103,8 @@ class History(Base):
     ), nullable=False, primary_key=True)
     id_movie = Column(Integer, ForeignKey(
         'movie_and_series.id_movie'), primary_key=True,  nullable=False)
-    date = Column(String, nullable=False, primary_key=True)
-    stop_time = Column(String)
+    date = Column(DateTime, nullable=False, primary_key=True)
+    stop_time = Column(Time)
 
 
 class Movie_and_series(Base):
@@ -112,7 +112,7 @@ class Movie_and_series(Base):
     id_movie = Column(Integer, nullable=False, primary_key=True)
     name = Column(String, nullable=False)
     rate = Column(Integer, nullable=False)
-    is_series = Column(Integer, nullable=False)
+    is_series = Column(Boolean, nullable=False)
     children = relationship("History")
     children2 = relationship("My_list")
     children3 = relationship("Casting")
@@ -136,9 +136,9 @@ class Plan(Base):
     name = Column(String, nullable=False)
     price = Column(Numeric, nullable=False)
     n_monitor = Column(Integer, nullable=False)
-    phone = Column(Integer, nullable=False)
-    web = Column(Integer, nullable=False)
-    television = Column(Integer, nullable=False)
+    phone = Column(Boolean, nullable=False)
+    web = Column(Boolean, nullable=False)
+    television = Column(Boolean, nullable=False)
     resolution = Column(String, nullable=False)
     children = relationship("User")
 
@@ -172,7 +172,7 @@ class Staff(Base):
     last_name = Column(String, nullable=False)
     email = Column(String, nullable=False)
     password = Column(String, nullable=False)
-    salary = Column(Integer, nullable=False)
+    salary = Column(Numeric, nullable=False)
     children = relationship("Staff_history_movie")
     children2 = relationship("Staff_history_soundtrack")
     children3 = relationship("Staff_history_subtitle")
@@ -181,13 +181,14 @@ class Staff(Base):
 class Staff_history_movie(Base):
     __tablename__ = 'staff_history_movie'
 
-    id_seq = Column(Integer, nullable=False, primary_key=True)
+    id_seq = Column(Integer, nullable=False,
+                    primary_key=True, autoincrement=True)
     id_movie = Column(Integer, ForeignKey(
         'movie_and_series.id_movie'), nullable=False)
     id_staff = Column(Integer, ForeignKey('staff.id_staff'), nullable=False)
-    date = Column(String)
-    start_date = Column(String)
-    expiration_date = Column(String)
+    date = Column(DateTime)
+    start_date = Column(Date)
+    expiration_date = Column(Date)
     comment = Column(String)
 
 
@@ -197,27 +198,28 @@ class Staff_history_soundtrack(Base):
     id_seq = Column(Integer, nullable=False,
                     primary_key=True, autoincrement=True)
     id_staff = Column(Integer, ForeignKey('staff.id_staff'), nullable=False)
-    start_date = Column(String)
-    date = Column(String)
+    start_date = Column(Date)
+    date = Column(DateTime)
 
 
 class Staff_history_subtitle(Base):
     __tablename__ = 'staff_history_subtitle'
 
-    id_seq = Column(Integer, nullable=False, primary_key=True)
+    id_seq = Column(Integer, nullable=False,
+                    primary_key=True, autoincrement=True)
     id_staff = Column(Integer, ForeignKey('staff.id_staff'), nullable=False)
-    start_date = Column(String)
-    date = Column(String)
+    start_date = Column(Date)
+    date = Column(DateTime)
 
 
 class Subtitle(Base):
     __tablename__ = 'subtitle'
 
-    id_sub = Column(Integer, nullable=False, primary_key=True)
+    id_sub = Column(Integer, nullable=False,
+                    primary_key=True, autoincrement=True)
     language = Column(String, nullable=False, primary_key=True)
     id_episode = Column(Integer, ForeignKey(
         'episode.id_episode'), nullable=False, primary_key=True)
-    file = Column(String)
 
 
 class Tag(Base):
@@ -235,8 +237,8 @@ class Viewer(Base):
     id_viewer = Column(Integer, nullable=False,
                        primary_key=True, autoincrement=True)
     id_account = Column(Integer, ForeignKey('user.id_account'), nullable=False)
-    pin_number = Column(Integer)
+    pin_number = Column(String)
     name = Column(String)
-    is_kid = Column(Integer, nullable=False)
+    is_kid = Column(Boolean, nullable=False)
     children = relationship("My_list")
     children2 = relationship("History")
