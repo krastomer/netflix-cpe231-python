@@ -18,6 +18,10 @@ def get_db():
         db.close()
 
 
+def hash_text(text: str):
+    return pwd_context.hash(text)
+
+
 async def get_current_user(token: str = Depends(config.oauth2_scheme), db: Session = Depends(get_db)):
     try:
         payload = jwt.decode(token, config.SECRET_KEY,

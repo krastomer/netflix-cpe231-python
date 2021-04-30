@@ -26,3 +26,18 @@ emailvalid_exception = HTTPException(
     status_code=status.HTTP_406_NOT_ACCEPTABLE,
     detail='Email has registered'
 )
+
+bademail_exception = HTTPException(
+    status_code=status.HTTP_406_NOT_ACCEPTABLE,
+    detail='Incorrect email'
+)
+
+badpassword_exception = HTTPException(
+    status_code=status.HTTP_406_NOT_ACCEPTABLE,
+    detail='Incorrect password'
+)
+
+badregister_exception = HTTPException(
+    status_code=status.HTTP_406_NOT_ACCEPTABLE,
+    detail='Incorrect data to register'
+)

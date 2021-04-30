@@ -11,8 +11,7 @@ class UserHash(UserBase):
     password: str
 
 
-class User(UserBase):
-    password: str
+class User(UserHash):
     phone_number: Optional[str]
     firstname: Optional[str]
     lastname: Optional[str]
