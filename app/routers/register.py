@@ -1,6 +1,6 @@
 from sqlalchemy.orm.session import Session
 from app.dependencies import get_db
-from database.crud import get_user_password
+from database.crud import create_user, get_user_password
 from database.schemas import User
 from fastapi import APIRouter, Depends
 from ..exceptions import emailvalid_exception
@@ -16,4 +16,6 @@ router = APIRouter(
 async def register_user(user: User, db: Session = Depends(get_db)):
     if get_user_password(db, user.email):
         raise emailvalid_exception
-    return {'test': 'test'}
+
+    success = create_user(db, user)
+    return {'test': success}

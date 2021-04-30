@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Numeric, ForeignKey
+from sqlalchemy import Column, Integer, String, Numeric, ForeignKey, Date
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -16,8 +16,8 @@ class User(Base):
     card_number = Column(String)
     exp_date = Column(String)
     security_code = Column(String)
-    next_billing = Column(String)
-    plan_id = Column(String, ForeignKey('plan.plan_id'), nullable=False)
+    next_billing = Column(Date)
+    plan_id = Column(Integer, ForeignKey('plan.plan_id'), nullable=False)
     children = relationship("Billing")
     children2 = relationship("Viewer")
 
@@ -43,8 +43,7 @@ class Casting(Base):
                         nullable=False, primary_key=True)
     id_movie = Column(Integer, ForeignKey(
         'movie_and_series.id_movie'), nullable=False, primary_key=True)
-    children = relationship("Movie_and_series")
-    children2 =relationship("Cast")
+
 
 class Director(Base):
     __tablename__ = 'director'
@@ -70,7 +69,7 @@ class Episode(Base):
     n_views = Column(Integer, nullable=False)
     description = Column(String)
     children = relationship("Episode_tag")
-    children2=relationship("Soundtrack")
+    children2 = relationship("Soundtrack")
     children3 = relationship("Subtitle")
 
 
@@ -115,13 +114,12 @@ class Movie_and_series(Base):
     rate = Column(Integer, nullable=False)
     is_series = Column(Integer, nullable=False)
     children = relationship("History")
-    children2= relationship("My_list")
-    children3=relationship( "Casting")
-    children4=relationship("Genres_movie")
-    children5=relationship("Director_movie")
-    children6=relationship("Season")
-    children7=relationship("Staff_history_movie")
-    
+    children2 = relationship("My_list")
+    children3 = relationship("Casting")
+    children4 = relationship("Genres_movie")
+    children5 = relationship("Director_movie")
+    children6 = relationship("Season")
+    children7 = relationship("Staff_history_movie")
 
 
 class My_list(Base):

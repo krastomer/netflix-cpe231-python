@@ -14,6 +14,7 @@ def create_user(db: Session, user: schemas.User):
             exp_date=user.exp_date,
             security_code=user.security_code,
             next_billing=user.next_billing,
+            plan_id=user.plan_id
         )
         db.add(content)
         db.commit()

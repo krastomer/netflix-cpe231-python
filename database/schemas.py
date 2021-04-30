@@ -1,5 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel
+from datetime import date
 
 
 class UserBase(BaseModel):
@@ -18,7 +19,7 @@ class User(UserBase):
     card_number: Optional[str]
     exp_date: Optional[str]
     security_code: Optional[str]
-    next_billing: Optional[str]
+    next_billing: Optional[date]
     plan_id: Optional[int]
 
 

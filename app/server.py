@@ -1,4 +1,5 @@
-from database import models
+from database.crud import create_user
+from database import models, schemas
 from database.database import engine
 from fastapi import FastAPI
 from .routers import token, register, poster
