@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from app.models.payment import Payment
 from sqlalchemy.orm import Session
 from . import models, schemas
@@ -50,7 +50,7 @@ def get_user_payment(db: Session, email: str):
             lastname=user.lastname,
             card_number=user.card_number,
             exp_date=user.exp_date,
-            security_code=user.exp_date,
+            security_code=user.security_code,
             next_billing=user.next_billing,
             plan_id=user.plan_id
         )
@@ -68,7 +68,8 @@ def set_user_payment(db: Session, email: str, payment: Payment):
                 models.User.exp_date: payment.exp_date,
                 models.User.security_code: payment.security_code,
                 models.User.plan_id: payment.plan_id,
-                models.User.next_billing: datetime.now().date()
+                models.User.next_billing: datetime.now().date(
+                ) + timedelta(days=30) if payment.plan_id else payment.next_billing
             }, synchronize_session=False)
         db.commit()
         return True
