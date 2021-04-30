@@ -1,7 +1,7 @@
 from datetime import timedelta
 from app.routers.token import create_access_token
 from sqlalchemy.orm.session import Session
-from app.dependencies import get_db, hash_text
+from app.dependencies import get_db, hash_password
 from database.crud import create_user, get_user_password
 from database.schemas import UserHash
 from fastapi import APIRouter, Depends
@@ -33,7 +33,7 @@ async def register_user(user: UserHash, db: Session = Depends(get_db)):
         raise badpassword_exception
     if user.password.isnumeric():
         raise badpassword_exception
-    user.password = hash_text(user.password)
+    user.password = hash_password(user.password)
     success = create_user(db, user)
     if not success:
         raise badregister_exception

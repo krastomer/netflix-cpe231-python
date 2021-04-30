@@ -1,6 +1,6 @@
-from app.dependencies import get_current_user, get_storage
+from app.dependencies import get_current_active_user, get_storage
 from fastapi import APIRouter, Depends
-from database.schemas import UserHash, UserId
+from database.schemas import UserId
 from app.exceptions import badparameter_exception, notfound_exception
 
 router = APIRouter(
@@ -11,7 +11,7 @@ router = APIRouter(
 
 
 @router.get('/')
-async def get_poster_all(movie: str = None, user: UserId = Depends(get_current_user)):
+async def get_poster_all(movie: str = None, user: UserId = Depends(get_current_active_user)):
     if movie == None:
         raise badparameter_exception
     storage = await get_storage()
@@ -24,5 +24,3 @@ async def get_poster_all(movie: str = None, user: UserId = Depends(get_current_u
     if count == 1:
         raise notfound_exception
     return {movie: list_url}
-
-# check billing date

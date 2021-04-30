@@ -1,4 +1,5 @@
 from fastapi import HTTPException, status
+from starlette.status import HTTP_400_BAD_REQUEST
 
 credentials_expection = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
@@ -40,4 +41,9 @@ badpassword_exception = HTTPException(
 badregister_exception = HTTPException(
     status_code=status.HTTP_406_NOT_ACCEPTABLE,
     detail='Incorrect data to register'
+)
+
+inactive_exception = HTTPException(
+    status_code=status.HTTP_400_BAD_REQUEST,
+    detail="Account didn't active or didn't have payment"
 )

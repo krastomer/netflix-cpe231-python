@@ -6,6 +6,8 @@ TOKEN_EXPIRES = 30
 SECRET_KEY = 'de8b533781c224224ea9fe781e3c77035fa4769e077e21b137ec723d45819f1b'
 ALGORITHM = 'HS256'
 
+FERNET_KEY = b'Z81YgEp_zAY-pcNOuTaMaoHdHTvhcTkeFUVwuwa-pMA='
+
 firebase_config = {
     'apiKey': "AIzaSyAz-5UqRKZo3VYCB5VH4xQWNzXWESfCuI4",
     'authDomain': "netflix-cpe231.firebaseapp.com",
