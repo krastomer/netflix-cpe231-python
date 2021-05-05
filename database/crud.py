@@ -75,3 +75,38 @@ def set_user_payment(db: Session, email: str, payment: Payment):
         return True
     except:
         return False
+
+
+def get_viewer(db: Session, id_account: int):
+    viewer = db.query(models.Viewer).filter(
+        models.Viewer.id_account == id_account)
+    viewer_list = []
+    if viewer.count() != 0:
+        for i in viewer:
+            viewer_list.append(schemas.Viewer(
+                id_viewer=i.id_viewer,
+                pin_number=i.pin_number,
+                name=i.name,
+                is_kid=i.is_kid
+            ))
+        return viewer_list
+    else:
+        v = add_viewer(db, id_account, schemas.Viewer(
+            name='You', is_kid=False))
+        viewer_list.append(v)
+    return viewer_list
+
+
+def add_viewer(db: Session, id_account: int, viewer: schemas.Viewer):
+    try:
+        content = models.Viewer(
+            id_account=id_account,
+            name=viewer.name,
+            is_kid=viewer.is_kid
+        )
+        db.add(content)
+        db.commit()
+        db.refresh(content)
+        return viewer
+    except:
+        return False
