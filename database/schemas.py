@@ -25,3 +25,10 @@ class User(UserHash):
 class UserId(UserBase):
     id_account: int
     next_billing: Optional[date]
+
+
+class Viewer(BaseModel):
+    id_viewer: Optional[int]
+    pin_number: Optional[str]
+    name: str
+    is_kid: bool
