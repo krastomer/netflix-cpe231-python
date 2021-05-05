@@ -11,7 +11,7 @@ router = APIRouter(
 
 
 @router.get('/')
-async def get_poster_all(movie: str = None, user: UserId = Depends(get_current_active_user)):
+async def get_poster_all(movie: str = None, _: UserId = Depends(get_current_active_user)):
     if movie == None:
         raise badparameter_exception
     storage = await get_storage()

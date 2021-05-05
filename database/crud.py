@@ -77,7 +77,7 @@ def set_user_payment(db: Session, email: str, payment: Payment):
         return False
 
 
-def get_viewer(db: Session, id_account: int):
+def get_user_viewer(db: Session, id_account: int):
     viewer = db.query(models.Viewer).filter(
         models.Viewer.id_account == id_account)
     viewer_list = []
@@ -91,22 +91,37 @@ def get_viewer(db: Session, id_account: int):
             ))
         return viewer_list
     else:
-        v = add_viewer(db, id_account, schemas.Viewer(
+        v = add_user_viewer(db, id_account, schemas.Viewer(
             name='You', is_kid=False))
         viewer_list.append(v)
     return viewer_list
 
 
-def add_viewer(db: Session, id_account: int, viewer: schemas.Viewer):
+def add_user_viewer(db: Session, id_account: int, viewer: schemas.Viewer):
     try:
-        content = models.Viewer(
-            id_account=id_account,
-            name=viewer.name,
-            is_kid=viewer.is_kid
-        )
+        if viewer.pin_number:
+            content = models.Viewer(
+                pin_number=viewer.pin_number,
+                id_account=id_account,
+                name=viewer.name,
+                is_kid=viewer.is_kid
+            )
+        else:
+            content = models.Viewer(
+                id_account=id_account,
+                name=viewer.name,
+                is_kid=viewer.is_kid
+            )
         db.add(content)
         db.commit()
         db.refresh(content)
         return viewer
     except:
         return False
+
+
+def delete_user_db(db: Session, viewer: int):
+    v = db.query(models.Viewer).filter(
+        models.Viewer.id_viewer == viewer).delete()
+    db.commit()
+    return v
