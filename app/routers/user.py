@@ -1,8 +1,11 @@
+from app.models.password import PackPassword, Password
 from datetime import timedelta
-from app.routers.token import create_access_token
+
+from starlette.routing import request_response
+from app.routers.token import authenticate_user, create_access_token
 from sqlalchemy.orm.session import Session
 from app.dependencies import get_current_user, get_db, hash_password
-from database.crud import create_user, delete_user_db, get_user_password
+from database.crud import change_password_user, create_user, delete_user_db, delete_user_viewer_all, get_user_password
 from database.schemas import UserHash, UserId
 from fastapi import APIRouter, Depends
 from app.exceptions import database_exception
@@ -48,8 +51,26 @@ async def register_user(user: UserHash, db: Session = Depends(get_db)):
 
 
 @router.delete('/')
-async def delete_user(user: UserId = Depends(get_current_user), db: Session = Depends(get_db)):
+async def delete_user(password: Password, user: UserId = Depends(get_current_user), db: Session = Depends(get_db)):
+    u = authenticate_user(db, user.email, password.password)
+    if not u:
+        raise badpassword_exception
+    _ = delete_user_viewer_all(db, user.id_account)
     v = delete_user_db(db=db, user_id=user.id_account)
+    if not v:
+        raise database_exception
+    return {'success': True}
+
+
+@router.post('/')
+async def re_password_user(password: PackPassword, user: UserId = Depends(get_current_user), db: Session = Depends(get_db)):
+    user = authenticate_user(db, user.email, password.password)
+    if not user:
+        raise badpassword_exception
+    if len(password.new_password) < 8 or password.new_password.isnumeric():
+        raise badpassword_exception
+    hash_new_pwd = hash_password(password.new_password)
+    v = change_password_user(db, hash_new_pwd, user.email)
     if not v:
         raise database_exception
     return {'success': True}

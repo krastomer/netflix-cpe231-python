@@ -91,9 +91,9 @@ def get_user_viewer(db: Session, id_account: int):
             ))
         return viewer_list
     else:
-        v = add_user_viewer(db, id_account, schemas.Viewer(
+        _ = add_user_viewer(db, id_account, schemas.Viewer(
             name='You', is_kid=False))
-        viewer_list.append(v)
+        viewer_list = get_user_viewer(db, id_account)
     return viewer_list
 
 
@@ -120,6 +120,13 @@ def delete_user_viewer(db: Session, viewer: int):
     return v
 
 
+def delete_user_viewer_all(db: Session, user_id: int):
+    v = db.query(models.Viewer).filter(
+        models.Viewer.id_account == user_id).delete()
+    db.commit()
+    return v
+
+
 def update_user_viewer(db: Session, viewer: schemas.Viewer):
     try:
         db.query(models.Viewer).filter(models.Viewer.id_viewer == viewer.id_viewer).update(
@@ -140,3 +147,16 @@ def delete_user_db(db: Session, user_id: int):
         models.User.id_account == user_id).delete()
     db.commit()
     return v
+
+
+def change_password_user(db: Session, pwd: str, email: str):
+    try:
+        db.query(models.User).filter(models.User.email == email).update(
+            {
+                models.User.password: pwd
+            }
+        )
+        db.commit()
+        return True
+    except:
+        return False
