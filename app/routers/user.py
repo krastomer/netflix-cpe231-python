@@ -1,7 +1,5 @@
 from app.models.password import PackPassword, Password
 from datetime import timedelta
-
-from starlette.routing import request_response
 from app.routers.token import authenticate_user, create_access_token
 from sqlalchemy.orm.session import Session
 from app.dependencies import get_current_user, get_db, hash_password

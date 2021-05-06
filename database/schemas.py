@@ -32,3 +32,9 @@ class Viewer(BaseModel):
     pin_number: Optional[str]
     name: Optional[str]
     is_kid: Optional[bool]
+
+
+class Episode(BaseModel):
+    name: str
+    no_episode: int
+    description: str

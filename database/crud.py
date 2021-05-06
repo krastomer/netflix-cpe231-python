@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+
+from sqlalchemy.sql.expression import distinct
 from app.models.payment import Payment
 from sqlalchemy.orm import Session
 from . import models, schemas
@@ -160,3 +162,99 @@ def change_password_user(db: Session, pwd: str, email: str):
         return True
     except:
         return False
+
+
+def get_movie_actors(db: Session, movie_id: int):
+    command = """
+        SELECT mov.id_movie , mov.name , cas.name as "cast"
+	    FROM public.movie_and_series mov
+	    JOIN public.casting casti
+	    ON casti.id_movie = mov.id_movie
+	    JOIN public.cast cas
+	    ON casti.id_casting = cas.id_casting 
+        WHERE mov.id_movie = {};
+    """.format(movie_id)
+    actors = db.execute(command)
+    return [i[2] for i in actors]
+
+
+def get_movie_directors(db: Session, movie_id: int):
+    command = """
+        SELECT mov.id_movie , mov.name , di.name as "director"
+	    FROM public.movie_and_series mov
+	    JOIN public.director_movie dim
+	    ON dim.id_movie = mov.id_movie
+	    JOIN public.director di
+	    ON di.id_director = dim.id_director
+        WHERE mov.id_movie = {};
+    """.format(movie_id)
+    directors = db.execute(command)
+    return [i[2] for i in directors]
+
+
+def get_movie_detail_db(db: Session, movie_id: int):
+    v = db.query(models.Movie_and_series).filter(
+        models.Movie_and_series.id_movie == movie_id).first()
+    rate = v.rate
+    name = v.name
+    w = db.query(models.Season).filter(
+        models.Season.id_movie == movie_id).first()
+    description = w.description
+    year = w.year
+    n_episode = w.n_episode
+    n_season = db.query(models.Season).filter(
+        models.Season.id_movie == movie_id).count()
+    return rate, name, description, year, n_episode, n_season
+
+
+def get_movie_genres(db: Session, movie_id: int):
+    command = """
+        SELECT mov.id_movie , mov.name ,gr.name as "Genres"
+	    FROM public.movie_and_series mov
+	    JOIN public.genres_movie grm
+	    ON grm.id_movie = mov.id_movie
+	    JOIN public.genres gr
+	    ON grm.id_genres = gr.id_genres
+        WHERE mov.id_movie = {};
+    """.format(movie_id)
+    directors = db.execute(command)
+    return [i[2] for i in directors]
+
+
+def get_actor_movie(db: Session, actor: str):
+    command = """
+        select cas.id_casting, cas.name, casti.id_movie, mov.name
+        from public.cast cas
+        join public.casting casti
+        on casti.id_casting = cas.id_casting
+        join public.movie_and_series mov
+        on mov.id_movie = casti.id_movie
+        where lower(cas.name) = lower('{}');
+    """.format(actor)
+    movies = db.execute(command)
+    d = dict()
+    for i in movies:
+        d[int(i[2])] = i[3]
+    return d
+
+
+def get_movie_episode_db(db: Session, movie_id: int):
+    command = """
+        SELECT mov.id_movie,se.name,Ep.episode_name,Ep.no_episode,Ep.description
+	    FROM public.movie_and_series mov
+	    JOIN public.Season Se
+	    ON Se.id_movie = mov.id_movie
+	    JOIN public.Episode Ep
+	    ON Ep.id_season = se.id_season
+	    where mov.id_movie = {}
+	;
+    """.format(movie_id)
+    episodes = db.execute(command)
+    episode_list = []
+    for i in episodes:
+        episode_list.append(schemas.Episode(
+            name=i[2],
+            no_episode=i[3],
+            description=i[4]
+        ))
+    return episode_list
