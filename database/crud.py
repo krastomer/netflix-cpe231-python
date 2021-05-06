@@ -99,19 +99,12 @@ def get_user_viewer(db: Session, id_account: int):
 
 def add_user_viewer(db: Session, id_account: int, viewer: schemas.Viewer):
     try:
-        if viewer.pin_number:
-            content = models.Viewer(
-                pin_number=viewer.pin_number,
-                id_account=id_account,
-                name=viewer.name,
-                is_kid=viewer.is_kid
-            )
-        else:
-            content = models.Viewer(
-                id_account=id_account,
-                name=viewer.name,
-                is_kid=viewer.is_kid
-            )
+        content = models.Viewer(
+            pin_number=viewer.pin_number if viewer.pin_number else None,
+            id_account=id_account,
+            name=viewer.name,
+            is_kid=viewer.is_kid
+        )
         db.add(content)
         db.commit()
         db.refresh(content)
@@ -120,8 +113,23 @@ def add_user_viewer(db: Session, id_account: int, viewer: schemas.Viewer):
         return False
 
 
-def delete_user_db(db: Session, viewer: int):
+def delete_user_viewer(db: Session, viewer: int):
     v = db.query(models.Viewer).filter(
         models.Viewer.id_viewer == viewer).delete()
     db.commit()
     return v
+
+
+def update_user_viewer(db: Session, viewer: schemas.Viewer):
+    try:
+        db.query(models.Viewer).filter(models.Viewer.id_viewer == viewer.id_viewer).update(
+            {
+                models.Viewer.name: viewer.name,
+                models.Viewer.is_kid: viewer.is_kid,
+                models.Viewer.pin_number: viewer.pin_number
+            }
+        )
+        db.commit()
+        return True
+    except:
+        return False

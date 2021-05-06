@@ -61,3 +61,8 @@ badviewerowner_exception = HTTPException(
     status_code=status.HTTP_404_NOT_FOUND,
     detail="Viewer ID not found"
 )
+
+database_exception = HTTPException(
+    status_code=status.HTTP_400_BAD_REQUEST,
+    detail="Database bad request"
+)

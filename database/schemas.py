@@ -30,5 +30,5 @@ class UserId(UserBase):
 class Viewer(BaseModel):
     id_viewer: Optional[int]
     pin_number: Optional[str]
-    name: str
-    is_kid: bool
+    name: Optional[str]
+    is_kid: Optional[bool]
