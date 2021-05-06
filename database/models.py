@@ -236,7 +236,7 @@ class Tag(Base):
     id_tag = Column(Integer, primary_key=True,
                     nullable=False, autoincrement=True)
     name = Column(String, unique=True)
-    children = relationship("Episode_Tag")
+    children = relationship("Episode_tag")
 
 
 class Viewer(Base):

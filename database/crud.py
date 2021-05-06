@@ -133,3 +133,10 @@ def update_user_viewer(db: Session, viewer: schemas.Viewer):
         return True
     except:
         return False
+
+
+def delete_user_db(db: Session, user_id: int):
+    v = db.query(models.User).filter(
+        models.User.id_account == user_id).delete()
+    db.commit()
+    return v
