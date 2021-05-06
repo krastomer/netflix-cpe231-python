@@ -6,4 +6,7 @@ router = APIRouter(
     responses={404: {'description': 'Not found'}}
 )
 
-# @router.get('/')
+
+@router.get('/')
+async def get_movie_detail():
+    pass

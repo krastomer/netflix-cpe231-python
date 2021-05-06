@@ -26,13 +26,15 @@ class Billing(Base):
     __tablename__ = 'billing'
 
     billing_date = Column(DateTime, nullable=False)
-    billing_id = Column(String, primary_key=True, nullable=False)
+    billing_id = Column(Integer, primary_key=True,
+                        nullable=False, autoincrement=True)
     id_account = Column(Integer, ForeignKey('user.id_account'), nullable=False)
 
 
 class Cast(Base):
     __tablename__ = 'cast'
-    id_casting = Column(Integer, primary_key=True, nullable=False)
+    id_casting = Column(Integer, primary_key=True,
+                        nullable=False, autoincrement=True)
     name = Column(String, nullable=False)
     children = relationship("Casting")
 
@@ -47,7 +49,8 @@ class Casting(Base):
 
 class Director(Base):
     __tablename__ = 'director'
-    id_director = Column(Integer, nullable=False, primary_key=True)
+    id_director = Column(Integer, nullable=False,
+                         primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     children = relationship("Director_movie")
 
@@ -62,7 +65,8 @@ class Director_movie(Base):
 
 class Episode(Base):
     __tablename__ = 'episode'
-    id_episode = Column(Integer, nullable=False, primary_key=True)
+    id_episode = Column(Integer, nullable=False,
+                        primary_key=True, autoincrement=True)
     id_season = Column(Integer, ForeignKey('season.id_season'))
     episode_name = Column(String)
     no_episode = Column(Integer, nullable=False)
@@ -77,13 +81,14 @@ class Episode_tag(Base):
     __tablename__ = 'episode_tag'
     id_episode = Column(Integer, ForeignKey(
         'episode.id_episode'), nullable=False, primary_key=True)
-    id_tag = Column(Integer, nullable=False, primary_key=True, unique=True)
-    children = relationship("Tag")
+    id_tag = Column(Integer, ForeignKey('tag.id_tag'),
+                    nullable=False, primary_key=True, unique=True)
 
 
 class Genres(Base):
     __tablename__ = 'genres'
-    id_genres = Column(Integer, nullable=False, primary_key=True)
+    id_genres = Column(Integer, nullable=False,
+                       primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     children = relationship("Genres_movie")
 
@@ -109,7 +114,8 @@ class History(Base):
 
 class Movie_and_series(Base):
     __tablename__ = 'movie_and_series'
-    id_movie = Column(Integer, nullable=False, primary_key=True)
+    id_movie = Column(Integer, nullable=False,
+                      primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     rate = Column(Integer, nullable=False)
     is_series = Column(Boolean, nullable=False)
@@ -147,17 +153,20 @@ class Season(Base):
     __tablename__ = 'season'
     id_movie = Column(Integer, ForeignKey(
         'movie_and_series.id_movie'), nullable=False)
-    id_season = Column(Integer, nullable=False, primary_key=True)
+    id_season = Column(Integer, nullable=False,
+                       primary_key=True, autoincrement=True)
     name = Column(String)
     n_episode = Column(Integer)
     year = Column(Integer)
+    description = Column(String)
     children = relationship("Episode")
 
 
 class Soundtrack(Base):
     __tablename__ = 'soundtrack'
 
-    id_soundtrack = Column(Integer, nullable=False, primary_key=True)
+    id_soundtrack = Column(Integer, nullable=False,
+                           primary_key=True, autoincrement=True)
     language = Column(String, nullable=False, primary_key=True)
     id_episode = Column(Integer, ForeignKey(
         'episode.id_episode'), nullable=False, primary_key=True)
@@ -224,11 +233,10 @@ class Subtitle(Base):
 
 class Tag(Base):
     __tablename__ = 'tag'
-
-    id_seq = Column(Integer, primary_key=True,
+    id_tag = Column(Integer, primary_key=True,
                     nullable=False, autoincrement=True)
-    id_tag = Column(Integer, ForeignKey("episode_tag.id_tag"), nullable=False)
     name = Column(String, unique=True)
+    children = relationship("Episode_Tag")
 
 
 class Viewer(Base):
