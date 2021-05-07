@@ -82,7 +82,7 @@ class Episode_tag(Base):
     id_episode = Column(Integer, ForeignKey(
         'episode.id_episode'), nullable=False, primary_key=True)
     id_tag = Column(Integer, ForeignKey('tag.id_tag'),
-                    nullable=False, primary_key=True, unique=True)
+                    nullable=False, primary_key=True)
 
 
 class Genres(Base):
