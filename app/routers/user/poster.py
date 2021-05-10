@@ -5,7 +5,7 @@ from app.exceptions import badparameter_exception, notfound_exception
 
 router = APIRouter(
     prefix='/poster',
-    tags=['Poster'],
+    tags=['User - Poster'],
     responses={404: {'description': 'Not found'}}
 )
 

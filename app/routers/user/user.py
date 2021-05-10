@@ -1,6 +1,6 @@
 from app.models.password import PackPassword, Password
 from datetime import timedelta
-from app.routers.token import authenticate_user, create_access_token
+from app.routers.user.token import authenticate_user, create_access_token
 from sqlalchemy.orm.session import Session
 from app.dependencies import get_current_user, get_db, hash_password
 from database.crud import change_password_user, create_user, delete_user_db, delete_user_viewer_all, get_user_password
@@ -8,12 +8,12 @@ from database.schemas import UserHash, UserId
 from fastapi import APIRouter, Depends
 from app.exceptions import database_exception
 import re
-from ..exceptions import emailvalid_exception, bademail_exception, badpassword_exception, badregister_exception
-from .. import config
+from app.exceptions import emailvalid_exception, bademail_exception, badpassword_exception, badregister_exception
+from app import config
 
 router = APIRouter(
     prefix='/user',
-    tags=['User'],
+    tags=['User - Account'],
     responses={404: {'description': 'Not found'}}
 )
 

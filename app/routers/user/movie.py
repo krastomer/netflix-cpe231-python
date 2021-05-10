@@ -8,7 +8,7 @@ from app.exceptions import notfound_exception
 
 router = APIRouter(
     prefix='/movie',
-    tags=['Movie'],
+    tags=['User - Movie'],
     responses={404: {'description': 'Not found'}}
 )
 

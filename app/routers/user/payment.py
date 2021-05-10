@@ -4,11 +4,11 @@ from app.dependencies import get_current_user, get_db
 from fastapi import APIRouter, Depends
 from app.models.payment import Payment, PaymentBase
 from sqlalchemy.orm import Session
-from ..exceptions import badparameter_exception, inactive_exception
+from app.exceptions import badparameter_exception, inactive_exception
 
 router = APIRouter(
     prefix='/payment',
-    tags=['Payment'],
+    tags=['User - Payment'],
     responses={404: {'description': 'Not found'}}
 )
 

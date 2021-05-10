@@ -38,3 +38,11 @@ class Episode(BaseModel):
     name: str
     no_episode: int
     description: str
+
+
+class StaffBase(BaseModel):
+    email: str
+
+
+class StaffHash(StaffBase):
+    password: str

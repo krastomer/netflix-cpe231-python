@@ -258,3 +258,10 @@ def get_movie_episode_db(db: Session, movie_id: int):
             description=i[4]
         ))
     return episode_list
+
+
+def get_staff_password(db: Session, email: str):
+    staff = db.query(models.Staff).filter(models.Staff.email == email).first()
+    if staff:
+        return schemas.UserHash(email=staff.email, password=staff.password)
+    return None

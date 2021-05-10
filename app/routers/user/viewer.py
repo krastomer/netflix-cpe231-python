@@ -7,7 +7,7 @@ from app.exceptions import fullviewer_exception, badaddviewer_exception, badview
 
 router = APIRouter(
     prefix='/viewer',
-    tags=['Viewer'],
+    tags=['User - Viewer'],
     responses={404: {'description': 'Not found'}}
 )
 
